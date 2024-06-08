@@ -1,0 +1,55 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+  }
+
+  .sidebar {
+    width: 200px;
+    height: 100vh;
+    background-color: #f2f2f2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .logo-placeholder {
+    width: 100%;
+    height: 100px;
+    background-color: #ffc3f5;
+  }
+
+  .navigation {
+    width: 100%;
+    text-align: center;
+  }
+
+  .navigation a {
+    display: block;
+    padding: 15px;
+    text-decoration: none;
+    color: #2b2b2b;
+    transition: color 0.3s;
+  }
+
+  .navigation a:hover {
+    color: #2b2bb2;
+  }
+
+  .user-profile {
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  .user-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background-color: #ccc;
+  }
+
+  .user-name {
+    margin-top: 10px;
+    font-weight: bold;
+  }
