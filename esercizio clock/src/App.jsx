@@ -7,7 +7,7 @@ export function App() {
     <div>
       {/* <Counter initialValue={0} incrementAmount={1} /> */}
       <h1>My React App</h1>
-      <Clock/>
+      <Clock />
     </div>
   );
 }
