@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form id="friendForm">  
+        <label for="friend_name">Friend Name:</label>
+        <input type="text" id="friend_name" name="friend_name" required><br><br>
+        
+        <label for="status">Status:</label>
+        <input type="text" id="status" name="status" required><br><br>
+        
+        <label for="species">Species:</label>
+        <input type="text" id="species" name="species" required><br><br>
+        
+        <label for="gender">Gender:</label>
+        <input type="text" id="gender" name="gender" required><br><br>
+                
+        <button type="submit">Add Friend</button>
+    </form>
+    <script>
+        const form = document.getElementById('friendForm');
+        form.addEventListener('submit', async function (event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const data = Object.fromEntries(formData.entries());
+            const response = await fetch('http://localhost:3005/character/friends', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            })
+            const result = await response.text();            
+            alert(result);
+        }
+        )
+    </script>
+</body>
+</html>
