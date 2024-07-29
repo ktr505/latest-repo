@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
 
-const GithubUser = () => {
-    const { username } = useParams();
+const GithubUser = ({ username }) => {
     const [userData, setUserData] = useState(null);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(true);

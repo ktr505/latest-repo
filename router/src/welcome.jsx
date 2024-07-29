@@ -1,8 +1,11 @@
 import React from 'react';
 
-const Welcome = ({ name = 'Guest' }) => {
+const Welcome = ({ name = "Guest" }) => {
   return (
-    <p>Welcome, {name}!</p>
+    <div>
+      <p>Welcome, {name}!</p>
+      <p>Try visiting <code>/users/ktr505</code> in the search bar to see a GitHub user's profile!</p>
+    </div>
   );
 };
 
