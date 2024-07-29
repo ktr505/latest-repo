@@ -1,28 +1,38 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
-export function useCurrentLocation() {
+const useCurrentLocation = (options = {}) => {
   const [location, setLocation] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const getLocation = async () => {
-      try {
-        const position = await new Promise((resolve, reject) => {
-          navigator.geolocation.getCurrentPosition(resolve, reject);
-        });
-        setLocation({
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
-        });
-      } catch (error) {
-        setError(error);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const handleSuccess = (position) => {
+    const { latitude, longitude } = position.coords;
+    setLocation({ latitude, longitude });
+    setError(null);
+    setLoading(false);
+  };
 
-    if (navigator.geolocation) {
-      getLocation();
-    } else {
-      setError(new Error('
+  const handleError = (error) => {
+    setError(error.message);
+    setLocation(null);
+    setLoading(false);
+  };
+
+  const getCurrentLocation = useCallback(() => {
+    setLoading(true);
+    if (!navigator.geolocation) {
+      setError('Geolocation is not supported by your browser');
+      setLoading(false);
+      return;
+    }
+    navigator.geolocation.getCurrentPosition(handleSuccess, handleError, options);
+  }, [options]);
+
+  useEffect(() => {
+    getCurrentLocation();
+  }, [getCurrentLocation]);
+
+  return { location, error, loading, getCurrentLocation };
+};
+
+export default useCurrentLocation;
