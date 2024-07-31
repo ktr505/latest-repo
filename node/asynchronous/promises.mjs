@@ -13,7 +13,7 @@ function luckyDraw(player) {
     });
   }
   
-  const players = ['John', 'Jack', 'Al'];
+  const players = ['Joe', 'Caroline', 'Sabrina'];
   
   luckyDraw(players[0])
     .then(result => {
