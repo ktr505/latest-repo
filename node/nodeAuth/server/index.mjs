@@ -1,4 +1,3 @@
-/* eslint-disable no-undef */
 import express from 'express';
 import sqlite3 from 'sqlite3';
 import { open } from 'sqlite';
@@ -7,7 +6,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import multer from 'multer';
 
-// Configurazione di multer per mantenere il file in memoria
+
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
@@ -35,21 +34,18 @@ dbPromise.then(async (db) => {
     fullname TEXT NOT NULL    
   )`);
 
-   // Poichè dobbiamo aggiungere una colonna successivamente alla creazione della tabella, verifichiamo se prima esiste [..]
    const columnExists = await db.get(`
     SELECT 1 
     FROM pragma_table_info('users')
     WHERE name = 'profile_image'
   `);
 
-  // [..]Se non esiste, la creiamo
   if (!columnExists) {
     await db.exec(`ALTER TABLE users ADD COLUMN profile_image BLOB`);
     console.log("Column profile_image added to users table");
   }
 });
 
-// Middleware per verificare il token JWT
 const authenticateToken = (req, res, next) => {
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
@@ -58,17 +54,14 @@ const authenticateToken = (req, res, next) => {
   jwt.verify(token, SECRET_KEY, (err, decoded) => {
     if (err) return res.sendStatus(403);
 
-    // dobbiamo verificare che il token contenga l'id dell'utente
     if (!decoded.id) {
       return res.status(403).json({ error: 'Invalid token data' });
     }
-//ritorniamo i dati decodificati dal token
     req.user = { id: decoded.id, username: decoded.username };
     next();
   });
 };
 
-//logica per l'upload nel database
 
 app.post('/upload/:id', authenticateToken, upload.single('profileImage'), async (req, res) => {
   console.log("Received file:", req.file);
@@ -96,7 +89,6 @@ app.post('/upload/:id', authenticateToken, upload.single('profileImage'), async 
   }
 });
 
-//richiesta per ottenere l'immagine dal database
 app.get('/image/:id', authenticateToken, async (req, res) => {
   const { id } = req.params;
   try {
@@ -106,7 +98,7 @@ app.get('/image/:id', authenticateToken, async (req, res) => {
       return res.status(404).send('No image found');
     }
     res.writeHead(200, {
-      'Content-Type': 'image/jpeg', // Facciamo conto che l'immagine debba essere JPEG
+      'Content-Type': 'image/jpeg',
       'Content-Length': row.profile_image.length
     });
     res.end(row.profile_image);
@@ -172,7 +164,7 @@ app.post('/login', async (req, res) => {
     if (!user) {
       return res.status(401).json({ error: 'Invalid credentials' });
     }
-//quando creiamo il token aggiungiamo anche l'id in modo tale che possa essere decodificato
+
     const token = jwt.sign({id: user.id, username: user.username }, SECRET_KEY, { expiresIn: '1h' });
     res.json({ token });
   } catch (error) {
